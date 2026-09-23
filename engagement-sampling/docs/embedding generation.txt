@@ -1,0 +1,73 @@
+import pandas as pd
+import numpy as np
+import torch
+from sentence_transformers import SentenceTransformer
+
+# --------------------------------------------------
+# 1. Load dataset
+# --------------------------------------------------
+df = pd.read_csv("data.csv")
+
+# Remove missing/empty content
+df = df[df["content"].notna()].copy()
+df["content"] = df["content"].astype(str)
+df = df[df["content"].str.strip() != ""].reset_index(drop=True)
+
+# Stable ID linking each row to its embedding
+df["embedding_id"] = np.arange(len(df))
+
+
+# --------------------------------------------------
+# 2. Select GPU if available
+# --------------------------------------------------
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print("Using device:", device)
+
+if device == "cuda":
+    print("GPU:", torch.cuda.get_device_name(0))
+
+
+# --------------------------------------------------
+# 3. Load MPNet
+# --------------------------------------------------
+model = SentenceTransformer(
+    "sentence-transformers/all-mpnet-base-v2",
+    device=device
+)
+
+
+# --------------------------------------------------
+# 4. Embed ALL rows
+# --------------------------------------------------
+embeddings = model.encode(
+    df["content"].tolist(),
+    batch_size=64,
+    show_progress_bar=True,
+    convert_to_numpy=True,
+    normalize_embeddings=True
+)
+
+
+# --------------------------------------------------
+# 5. Save embedding bank
+# --------------------------------------------------
+np.save(
+    "content_embeddings.npy",
+    embeddings.astype("float32")
+)
+
+df.to_parquet(
+    "content_metadata.parquet",
+    index=False
+)
+
+
+# --------------------------------------------------
+# 6. Verify
+# --------------------------------------------------
+print("Number of posts:", len(df))
+print("Embedding shape:", embeddings.shape)
+
+assert len(df) == embeddings.shape[0]
+
+print("Embedding bank successfully created.")
