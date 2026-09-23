@@ -1,0 +1,19 @@
+# data and results
+data/*
+!data/.gitkeep
+cache/
+output/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# os
+.DS_Store
+Thumbs.db

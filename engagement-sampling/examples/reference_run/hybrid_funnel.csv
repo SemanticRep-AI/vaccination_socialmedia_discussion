@@ -1,0 +1,5 @@
+dataset,raw_rows,after_language,blank_language,unparsed_dates,blank_text_dropped,duplicates_collapsed,frame_rows,first_period,last_period
+pro_vaccine,8367,7902,0,0,0,2055,5847,2025-09,2026-08
+anti_vaccine,59582,55665,0,0,0,33159,22506,2025-08,2026-08
+politicians,25554,25050,0,0,0,10881,14169,2025-08,2026-08
+journalists,86461,82249,0,0,0,43505,38744,2025-08,2026-08

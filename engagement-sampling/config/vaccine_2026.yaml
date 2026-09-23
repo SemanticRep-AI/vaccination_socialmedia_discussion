@@ -1,0 +1,130 @@
+# ---------------------------------------------------------------------------
+# Vaccine discourse 2025-2026
+#
+# Four search profiles exported from the platform, sampled monthly for manual
+# coding. This file is the complete specification of the study: changing the
+# sample means changing this file, not the code.
+# ---------------------------------------------------------------------------
+name: Vaccine Discourse Sampling 2025-2026
+
+datasets:
+  pro_vaccine:  pro_vaccine
+  anti_vaccine: anti_vaccine
+  politicians:  politicians
+  journalists:  journalists
+
+dataset_order: [pro_vaccine, anti_vaccine, politicians, journalists]
+
+# ---------------------------------------------------------------------------
+# Frame
+#
+# Language only. No geography filter: the study covers English-language
+# discourse wherever it originates. To restrict it to US authors, uncomment the
+# second filter - the country name and the ISO code are interchangeable
+# encodings of the same field, so listing both is deliberate.
+# ---------------------------------------------------------------------------
+frame:
+  date_column: published
+  period: M
+  text_column: content
+  id_column: url
+  deduplicate: true
+  dedup_normalise: true
+  drop_missing_text: true
+  filters:
+    - name: language
+      columns: [lang]
+      keep: [en]
+      allow_blank: false
+    # - name: country
+    #   columns:
+    #     - extra_author_attributes.world_data.country
+    #     - extra_author_attributes.world_data.country_code
+    #   keep: [us, usa, united states, united states of america]
+    #   allow_blank: false
+
+# ---------------------------------------------------------------------------
+# Engagement
+#
+# Views and impressions carry a weight of 0.1. They are passive and two to
+# three orders of magnitude larger than a like or a share, so at weight 1 they
+# would decide the total by themselves.
+# ---------------------------------------------------------------------------
+engagement:
+  total_name: content_engagement
+  source_column: engagement
+  source_name: source_engagement
+  measures:
+    - name: facebook_engagement
+      components:
+        article_extended_attributes.facebook_shares: 1.0
+        article_extended_attributes.facebook_likes: 1.0
+        article_extended_attributes.facebook_reactions_total: 1.0
+    - name: pinterest_engagement
+      components:
+        article_extended_attributes.pinterest_likes: 1.0
+        article_extended_attributes.pinterest_pins: 1.0
+        article_extended_attributes.pinterest_repins: 1.0
+    - name: youtube_engagement
+      components:
+        article_extended_attributes.youtube_views: 0.1
+        article_extended_attributes.youtube_likes: 1.0
+        article_extended_attributes.youtube_dislikes: 1.0
+    - name: instagram_engagement
+      components:
+        article_extended_attributes.instagram_likes: 1.0
+    - name: x_engagement
+      components:
+        article_extended_attributes.twitter_retweets: 1.0
+        article_extended_attributes.twitter_shares: 1.0
+        article_extended_attributes.twitter_quote_tweets: 1.0
+        article_extended_attributes.twitter_replies: 1.0
+        article_extended_attributes.twitter_impressions: 0.1
+        article_extended_attributes.twitter_video_views: 0.1
+        article_extended_attributes.twitter_likes: 1.0
+      aliases:
+        article_extended_attributes.twitter_impressions:
+          - article_extended_attributes.twitter_impression
+    - name: linkedin_engagement
+      components:
+        article_extended_attributes.linkedin_shares: 1.0
+        article_extended_attributes.linkedin_impression: 0.1
+      aliases:
+        article_extended_attributes.linkedin_impression:
+          - article_extended_attributes.linkedin_impressions
+
+# ---------------------------------------------------------------------------
+# Design
+#
+# 10% of each month's frame, capped at 2,000. The cap makes the design
+# unequal-probability, which is why every drawn unit carries a design weight.
+#
+# Two priority measures: the derived total, and the platform's own engagement
+# column. They rank posts very differently, so taking the top of either gives
+# the coders both kinds of prominent content.
+# ---------------------------------------------------------------------------
+design:
+  rate: 0.10
+  cap: 2000
+  allocation: proportional
+  priority_measures: [content_engagement, source_engagement]
+  top_pct: 0.05
+  seed: 42
+  min_stratum_quota: 0
+
+# Columns carried into the sample and the coder files.
+keep_columns:
+  - url
+  - published
+  - lang
+  - source_type
+  - post_type
+  - sentiment
+  - content
+  - matched_profile
+  - domain_url
+  - extra_author_attributes.name
+  - extra_author_attributes.short_name
+  - extra_author_attributes.world_data.country
+  - reach
+  - word_count

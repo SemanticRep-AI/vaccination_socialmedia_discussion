@@ -1,0 +1,5 @@
+dataset,measure_a,measure_b,n,pearson,spearman,both_zero_pct
+pro_vaccine,content_engagement,source_engagement,5847,0.0198933816780672,0.2676936381357207,70.41
+anti_vaccine,content_engagement,source_engagement,22506,0.0247914017897716,0.4338581948310262,65.72
+politicians,content_engagement,source_engagement,14169,0.1064259069895966,0.4049593711246347,62.52
+journalists,content_engagement,source_engagement,38744,0.3530385683878809,0.506238136014787,58.1

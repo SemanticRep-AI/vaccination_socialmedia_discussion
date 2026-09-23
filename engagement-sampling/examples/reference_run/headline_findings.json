@@ -1,0 +1,26 @@
+{
+  "overlap_pct": 2.6,
+  "weight_ratio": 1.33,
+  "arbitrary_pct": 5.2,
+  "arbitrary_pct_antivax": 15.3,
+  "dedup_loss_pct": 43.0,
+  "sampled_total": 16257,
+  "usable_total": 9267,
+  "dup_mean_eng": 70931.76682403435,
+  "kept_mean_eng": 10997.687460882702,
+  "dup_median_eng": 32474.5,
+  "kept_median_eng": 194.1,
+  "engagement_mass_retained": 17.05047513604099,
+  "decile_drop": {
+    "1": 1.4,
+    "2": 0.1,
+    "3": 0.6,
+    "4": 0.7,
+    "5": 9.9,
+    "6": 74.8,
+    "7": 83.4,
+    "8": 86.6,
+    "9": 88.0,
+    "10": 84.5
+  }
+}
